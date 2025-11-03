@@ -8,16 +8,20 @@ export default defineConfig({
     viewportHeight: 720,
     video: true,
     screenshotOnRunFailure: true,
-
-    // Timeouty dostosowane do aplikacji
     defaultCommandTimeout: 10000,
     pageLoadTimeout: 30000,
-    requestTimeout: 10000,
 
-    // Retry configuration dla niestabilnych testów
-    retries: {
-      runMode: 2,
-      openMode: 0,
+    reporter: "mochawesome",
+    reporterOptions: {
+      reportDir: "cypress/reports/mochawesome",
+      overwrite: false,
+      html: true, // ✅ Zmień na true
+      json: true,
+      timestamp: "mmddyyyy_HHMMss",
+      charts: true,
+      reportPageTitle: "Cypress Test Report - Demo Bank",
+      embeddedScreenshots: true,
+      inlineAssets: true,
     },
 
     setupNodeEvents(on, config) {
@@ -26,6 +30,5 @@ export default defineConfig({
 
     specPattern: "cypress/e2e/tests/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
-    reporter: "reporters/custom.js",
   },
 });

@@ -1,1 +1,4 @@
 node_modules/
+cypress/reporters/
+cypress/videos
+cypress/reports
