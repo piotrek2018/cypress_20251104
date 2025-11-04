@@ -74,7 +74,3 @@ jobs:
         if: always()
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Output report URL
-        if: always()
-        run: echo "Report publikowany pod adresem: ${{ steps.deployment.outputs.page_url }}"
