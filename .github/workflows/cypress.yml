@@ -58,8 +58,10 @@ jobs:
           # Sprawdź, czy są pliki HTML w podkatalogach
           elif find cypress/reports -name "*.html" | grep -q .; then
             echo "Found HTML files in subdirectories"
-            # Skopiuj wszystkie pliki HTML
+            # Skopiuj wszystkie pliki HTML i zasoby
             find cypress/reports -name "*.html" -exec cp {} public/ \;
+            find cypress/reports -name "*.css" -exec cp {} public/ \; 2>/dev/null || true
+            find cypress/reports -name "*.js" -exec cp {} public/ \; 2>/dev/null || true
             # Jeśli jest mochawesome.html, użyj go jako index.html
             if [ -f "public/mochawesome.html" ]; then
               cp public/mochawesome.html public/index.html
@@ -89,21 +91,29 @@ jobs:
           path: cypress/videos
           retention-days: 7
 
-      - name: Setup Pages
-        if: always()
-        uses: actions/configure-pages@v4
-
       - name: Upload artifact for GitHub Pages
         if: always()
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
 
+  deploy:
+    needs: cypress-run
+    if: always()
+    runs-on: ubuntu-24.04
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
-        if: always()
         id: deployment
         uses: actions/deploy-pages@v4
 
       - name: Output report URL
-        if: always()
         run: echo "Test Report URL - ${{ steps.deployment.outputs.page_url }}"
