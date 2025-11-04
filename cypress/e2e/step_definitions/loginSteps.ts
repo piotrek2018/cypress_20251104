@@ -27,7 +27,7 @@ When("użytkownik wprowadza za krótki login", () => {
   });
 });
 
-When("użytkownik odznacza pole", () => {
+When("użytkownik odznacza pole identyfikator", () => {
   loginPage.triggerLoginValidation();
 });
 
@@ -35,5 +35,30 @@ Then("system powinien wyświetlić błąd o minimalnej długości loginu", () =>
   cy.fixture("loginData").then((data) => {
     const errorMsg = data.errorMessages.usernameMinLength;
     loginPage.verifyLoginError(errorMsg);
+  });
+});
+
+When("użytkownik wprowadza poprawną nazwę użytkownika", () => {
+  cy.fixture("loginData").then((data) => {
+    const validUser = data.validUser;
+    loginPage.enterLogin(validUser.userId);
+  });
+});
+
+When("użytkownik wprowadza za krótkie hasło", () => {
+  cy.fixture("loginData").then((data) => {
+    const invalidUser = data.invalidUsers.tooShortPassword;
+    loginPage.enterPassword(invalidUser.userPassword);
+  });
+});
+
+When("użytkownik odznacza pole hasło", () => {
+  loginPage.triggerPasswordValidation();
+});
+
+Then("system powinien wyświetlić błąd o minimalnej długości hasła", () => {
+  cy.fixture("loginData").then((data) => {
+    const errorMsg = data.errorMessages.passwordMinLength;
+    loginPage.verifyPasswordError(errorMsg);
   });
 });
