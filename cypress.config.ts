@@ -1,5 +1,7 @@
-// cypress.config.ts
 import { defineConfig } from "cypress";
+import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
+import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-preprocessor";
+import { createEsbuildPlugin } from "@badeball/cypress-cucumber-preprocessor/esbuild";
 
 export default defineConfig({
   e2e: {
@@ -10,7 +12,6 @@ export default defineConfig({
     screenshotOnRunFailure: true,
     defaultCommandTimeout: 10000,
     pageLoadTimeout: 30000,
-
     reporter: "cypress-mochawesome-reporter",
     reporterOptions: {
       reportDir: "cypress/reports",
@@ -23,12 +24,27 @@ export default defineConfig({
       inlineAssets: true,
     },
 
-    setupNodeEvents(on, config) {
+    // Cucumber configuration
+    specPattern: "cypress/e2e/**/*.feature",
+
+    async setupNodeEvents(on, config) {
+      // Cucumber plugin
+      await addCucumberPreprocessorPlugin(on, config);
+
+      // Reporter plugin
       require("cypress-mochawesome-reporter/plugin")(on);
+
+      // Esbuild preprocessor with Cucumber support
+      on(
+        "file:preprocessor",
+        createBundler({
+          plugins: [createEsbuildPlugin(config)],
+        })
+      );
+
       return config;
     },
 
-    specPattern: "cypress/e2e/tests/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
   },
 });
