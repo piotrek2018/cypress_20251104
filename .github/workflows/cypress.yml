@@ -38,32 +38,6 @@ jobs:
           command: npm run cy:run:chrome
         continue-on-error: true
 
-      - name: Debug - List generated reports
-        if: always()
-        run: |
-          echo "Checking cypress/reports directory:"
-          ls -la cypress/reports/ || echo "No reports directory found"
-          find cypress/reports -type f || echo "No files found"
-
-      - name: Merge Mochawesome reports
-        if: always()
-        run: |
-          if [ -d "cypress/reports" ] && [ "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
-            npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome-bundle.json
-            npx marge cypress/reports/mochawesome-bundle.json --reportDir cypress/reports/html --inline
-            echo "Reports merged successfully"
-          else
-            echo "No JSON reports found to merge"
-            mkdir -p cypress/reports/html
-            echo "<h1>No test reports generated</h1>" > cypress/reports/html/index.html
-          fi
-
-      - name: Debug - List HTML reports
-        if: always()
-        run: |
-          echo "Checking cypress/reports/html directory:"
-          ls -la cypress/reports/html/ || echo "No HTML directory found"
-
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         if: failure()
@@ -88,7 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-pages-artifact@v3
         with:
-          path: cypress/reports/html
+          path: cypress/reports
 
       - name: Deploy to GitHub Pages
         if: always()
@@ -97,4 +71,4 @@ jobs:
 
       - name: Output report URL
         if: always()
-        run: echo "Test Report available at ${{ steps.deployment.outputs.page_url }}"
+        run: echo "Test Report URL - ${{ steps.deployment.outputs.page_url }}"

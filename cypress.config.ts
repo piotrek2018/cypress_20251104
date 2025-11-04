@@ -11,13 +11,12 @@ export default defineConfig({
     defaultCommandTimeout: 10000,
     pageLoadTimeout: 30000,
 
-    reporter: "mochawesome",
+    reporter: "cypress-mochawesome-reporter",
     reporterOptions: {
-      reportDir: "cypress/reports/mochawesome",
+      reportDir: "cypress/reports",
       overwrite: false,
-      html: true, // ✅ Zmień na true
+      html: true,
       json: true,
-      timestamp: "mmddyyyy_HHMMss",
       charts: true,
       reportPageTitle: "Cypress Test Report - Demo Bank",
       embeddedScreenshots: true,
@@ -25,6 +24,7 @@ export default defineConfig({
     },
 
     setupNodeEvents(on, config) {
+      require("cypress-mochawesome-reporter/plugin")(on);
       return config;
     },
 

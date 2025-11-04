@@ -18,6 +18,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "cypress": "^13.6.0",
+    "cypress-mochawesome-reporter": "^4.0.2",
     "eslint": "^8.0.0",
     "eslint-plugin-cypress": "^2.15.0",
     "mochawesome": "^7.1.4",
