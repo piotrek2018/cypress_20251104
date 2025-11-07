@@ -9,6 +9,7 @@ export class LoginPage extends BasePage {
     loginButton: '[data-testid="login-button"]',
     loginError: '[data-testid="error-login-id"]',
     passwordError: '[data-testid="error-login-password"]',
+    bankLogo: 'a.logo.login',
   };
 
   constructor() {
@@ -75,5 +76,9 @@ export class LoginPage extends BasePage {
 
   verifyLoginButtonDisabled(): void {
     cy.get(this.selectors.loginButton).should("be.disabled");
+  }
+
+  verifyBankLogoVisible(): void {
+    this.verifyElementVisible(this.selectors.bankLogo);
   }
 }
