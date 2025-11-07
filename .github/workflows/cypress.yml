@@ -89,7 +89,7 @@ jobs:
 
   deploy:
     needs: cypress-run
-    if: always()
+    if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-24.04
 
     permissions:
